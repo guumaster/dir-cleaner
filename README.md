@@ -37,7 +37,7 @@ It was used as a demo on our internal Golang program. It contains different vers
 
 ### Version 0
 
-Just the CLI skeleton to see how to use `urfave/cli` and capture parameters. 
+Just the CLI skeleton to see how to use `urfave/cli` and capture parameters.
 
 
 ### Version 1
@@ -65,3 +65,5 @@ This version is the most complete version. It is full documented, with examples 
 - [ ] Make the search pattern a flag (currently only search for `node_modules`)
 - [ ] Automate release to Github with Actions (see `version3/.github`)
 - [ ] Make it auto-installable (see `version3/install.sh`)
+
+

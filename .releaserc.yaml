@@ -1,0 +1,13 @@
+analyzeCommits:
+  format: angular
+  preset: angular
+generateNotes:
+  preset: angular
+  changelogFile: CHANGELOG.md
+plugins:
+  - @semantic-release/git
+  - @semantic-release/github
+  - @semantic-release/commit-analyzer
+branch: master
+success: false
+fail: false

@@ -30,10 +30,10 @@ func buildCLI(app *cleaner.App) *cli.App {
 	d, _ := time.Parse(time.RFC3339, date)
 	return &cli.App{
 		Name:      "dir-cleaner",
-		Usage:     "remove some unused files on your system",
+		Usage:     "remove your unused files on your system",
 		Version:   version,
 		Compiled:  d,
-		UsageText: "dir-cleaner [--path <path>] [--depth <num>] [--dry-run]",
+		UsageText: "dir-cleaner [--path <path>] [--depth <num>] [--dry-run] [--pattern <some_path> [--pattern <some_path>]]",
 		Authors: []*cli.Author{
 			{
 				Name:  "Gustavo Marin",
@@ -47,6 +47,12 @@ func buildCLI(app *cleaner.App) *cli.App {
 				DefaultText: "$PWD",
 				Value:       cwd,
 				Aliases:     []string{"p"},
+			},
+
+			&cli.StringSliceFlag{
+				Name:     "pattern",
+				Usage:    "pattern to search (can be repeated for multiple patterns)",
+				Required: true,
 			},
 
 			&cli.BoolFlag{
@@ -79,14 +85,14 @@ func buildCLI(app *cleaner.App) *cli.App {
 
 			opts := &cleaner.Options{
 				Path:       path,
-				Pattern:    "node_modules", // TODO: make it a flag
+				Patterns:   c.StringSlice("pattern"),
 				MaxDepth:   c.Int("max-depth"),
 				DryRun:     c.Bool("dry-run"),
 				Verbose:    c.Bool("verbose"),
 				CountBytes: c.Bool("bytes"),
 			}
 			if opts.DryRun {
-				fmt.Println("DURING THIS DRY RUN NO DATA IS HARM IN ANY WAY.")
+				fmt.Println("DURING THIS DRY RUN YOUR DATA WON'T BE HARM IN ANY WAY.")
 			}
 			cleanStats, err := app.Clean(opts)
 			if err != nil {

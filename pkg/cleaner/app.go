@@ -75,12 +75,20 @@ func AppendFileInfo(f os.FileInfo, root, path string) *FileInfo {
 func ScanPath(options *Options, stats *Stats) error {
 	rootPath := options.Path
 	maxDepth := options.MaxDepth
-	reMatch := regexp.MustCompile(options.Pattern)
-	reEndMatch := regexp.MustCompile(options.Pattern + "$")
+	var reMatch []*regexp.Regexp
+	var reEndMatch []*regexp.Regexp
+	for _, p := range options.Patterns {
+		reMatch = append(reMatch, regexp.MustCompile(regexp.QuoteMeta(p)))
+		reEndMatch = append(reEndMatch, regexp.MustCompile(regexp.QuoteMeta(p)+"$"))
+	}
 
 	return filepath.Walk(rootPath, func(srcPath string, info os.FileInfo, err error) error {
+		stats.Files += 1
 		if err != nil {
-			return err
+			if options.Verbose {
+				fmt.Printf("Skipping path: [%s]\n", srcPath)
+			}
+			return nil
 		}
 
 		if srcPath == rootPath {
@@ -98,17 +106,32 @@ func ScanPath(options *Options, stats *Stats) error {
 			return nil
 		}
 
-		match := reMatch.MatchString(meta.RelativePath)
+		match := false
+		for _, r := range reMatch {
+			match = r.MatchString(meta.RelativePath)
+			if match {
+				break
+			}
+
+		}
 		if !match {
 			return nil
 		}
 
-		if info.IsDir() && reEndMatch.MatchString(meta.RelativePath) {
-			stats.RemovePaths = append(stats.RemovePaths, srcPath)
+		if info.IsDir() {
+			// only append to remove list those that have one match at the end of it
+			for i, r := range reMatch {
+				if len(r.FindAllString(meta.RelativePath, -1)) == 1 &&
+					reEndMatch[i].MatchString(meta.RelativePath) {
+					stats.RemovePaths = append(stats.RemovePaths, srcPath)
+					break
+				}
+
+			}
 		}
 
 		if !info.IsDir() {
-			stats.Files += 1
+			stats.FilesMatched += 1
 		}
 		size := info.Size()
 		if !options.CountBytes && size < 4096 {

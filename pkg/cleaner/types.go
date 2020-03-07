@@ -65,7 +65,7 @@ type Stats struct {
 // String shows a formatted report of all the stats
 func (s Stats) String() string {
 	if s.FilesMatched == 0 && len(s.RemovePaths) == 0 {
-		return fmt.Sprintf("No maftch found on [%s]\n", s.Path)
+		return fmt.Sprintf("No match found on [%s]\n", s.Path)
 	}
 
 	return fmt.Sprintf("Path: [%s]: Scanned %s files. Matched %s in %s directories. [%s]",

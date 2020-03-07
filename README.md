@@ -2,7 +2,7 @@
 [![GitHub Release](https://img.shields.io/github/release/guumaster/dir-cleaner.svg?logo=github&labelColor=262b30)](https://github.com/guumaster/dir-cleaner/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/guumaster/dir-cleaner)](https://goreportcard.com/report/github.com/guumaster/dir-cleaner)
 [![License](https://img.shields.io/github/license/guumaster/dir-cleaner)](https://github.com/guumaster/dir-cleaner/LICENSE)
-# Dir Cleaner example
+# Dir Cleaner
 
 A simple tool to scan and remove unwanted directories from your system.
 

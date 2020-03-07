@@ -1,0 +1,47 @@
+# This is an example goreleaser.yaml file with some sane defaults.
+# Make sure to check the documentation at http://goreleaser.com
+project_name: dir-cleaner
+builds:
+  - id: dir-cleaner
+    binary: dir-cleaner
+    main: cmd/main.go
+    env:
+      - GO111MODULE=on
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+
+changelog:
+  sort: desc
+
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
+    replacements:
+      amd64: 64-bit
+      darwin: macOS
+
+before:
+  hooks:
+    - go mod tidy
+
+release:
+  github:
+    owner: guumaster
+    name: dir-cleaner
+
+nfpms:
+  - id: dir-cleaner
+    builds:
+      - dir-cleaner
+    formats:
+      - deb
+    vendor: Guumaster
+    homepage: https://github.com/guumaster/dir-cleaner
+    maintainer: guumaster <guuweb@gmail.com>
+    description: remove forgotten folders quick and easy

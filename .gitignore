@@ -1,3 +1,4 @@
-testing-backup
-testing
 .idea
+.vscode
+dist
+testing*
